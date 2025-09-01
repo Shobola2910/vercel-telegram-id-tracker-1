@@ -1,0 +1,43 @@
+# Vercel Telegram ID Tracker
+
+Serverless Next.js app that receives Telegram webhook at `/api/telegram`, extracts IDs like `#N710`, classifies action phrases, and counts them in **Vercel KV (Upstash)** with **1-hour per-chat de-duplication**.
+
+## Actions
+- `Called: Instructions are provided` → **Instruction**
+- `Explained` → **Explanation**
+- `Connected` → **Connected eld**
+- `Done / Ready / Fixed` → **Response**
+
+## De-duplication
+If the same **ID** is posted in the **same chat** within **1 hour**, it will **not** be counted again.
+
+---
+
+## Deploy (Vercel)
+1. Create a new Vercel project → Framework: Next.js
+2. Add **Vercel KV** integration (Upstash)
+3. Set env var: `TELEGRAM_SECRET_TOKEN` to a long random string
+4. Deploy
+
+Set Telegram webhook:
+```
+https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://<your-app>.vercel.app/api/telegram&secret_token=<TELEGRAM_SECRET_TOKEN>
+```
+
+Open dashboard: `https://<your-app>.vercel.app/dashboard`
+
+---
+
+## Local Dev
+```bash
+npm i
+cp .env.example .env
+# Fill KV_REST_API_URL and KV_REST_API_TOKEN from your Upstash dashboard
+npm run dev
+```
+
+## API
+- `POST /api/telegram` — Telegram webhook
+- `GET /api/stats` — global summary
+- `GET /api/stats/chat?chat_id=...` — per chat
+- `GET /api/stats/id?id=#N710` — per ID

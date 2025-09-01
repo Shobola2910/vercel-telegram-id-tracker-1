@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "app/api/telegram/route.ts": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 10
+    },
+    "app/api/stats/**": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 10
+    }
+  }
+}
